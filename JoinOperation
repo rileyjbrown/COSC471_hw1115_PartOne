@@ -1,0 +1,113 @@
+package com.company;
+
+import java.util.Random;
+
+public class JoinOperation {
+
+    private int tableSize;
+
+    private Row[] tableR1;
+    private Row[] tableS1;
+    private HashTableItem[] tableS2;
+
+    public JoinOperation(int tableSize){
+        this.tableSize = tableSize;
+
+        tableR1 = new Row[tableSize];
+        tableS1 = new Row[tableSize];
+        tableS2 = new HashTableItem[tableSize*2];
+
+        for(long i = 0; i < tableSize; i++){
+            insertIntoTableR1(i);
+            insertIntoTableS1(i);
+            insertIntoTableS2(i);
+
+        }
+    }
+
+    public void insertIntoTableR1(long insertLocation){
+
+        long ID = insertLocation + 1;
+
+        tableR1[(int)insertLocation] = new Row(Utilities.createRandomInt(), Utilities.createRandomCharArray(Row.SecondAttributeLength), ID);
+    }
+
+    public void insertIntoTableS1(long insertLocation){
+
+        long ID = insertLocation + 1;
+
+        tableS1[(int)insertLocation] = new Row(Utilities.createRandomInt(), Utilities.createRandomCharArray(Row.SecondAttributeLength), ID);
+
+    }
+
+    public void insertIntoTableS2(long insertLocation){
+
+        long ID = insertLocation + 1;
+
+        Row row = new Row(Utilities.createRandomInt(), Utilities.createRandomCharArray(Row.SecondAttributeLength), ID);
+
+        int index = new Integer((int)ID).hashCode()%tableSize;
+
+        if(tableS2[index] != null){
+            HashTableItem item = tableS2[index];
+            item.insertIntoOverflowTable(row);
+        }
+        else{
+            HashTableItem item = new HashTableItem(row);
+            tableS2[index] = item;
+        }
+    }
+
+    public JoinResult joinR1OnS1(){
+        int hitCount = 0;
+        int missCount = 0;
+        for(int i = 0; i < tableR1.length; i++){
+            for(int j = 0; j < tableS1.length; j++){
+                if(tableR1[i].getID() == tableS1[j].getID()){
+                    hitCount++;
+                    break;
+                }
+                else{
+                    missCount++;
+                }
+
+            }
+        }
+        return new JoinResult(hitCount, missCount);
+    }
+
+    public JoinResult joinR1OnS2(){
+
+        int hitCount = 0;
+        int missCount = 0;
+
+        for(int i = 0; i < tableR1.length; i++){
+            int index = new Integer((int)tableR1[i].getID()).hashCode()%tableSize;
+            if(tableS2[index] != null){
+                HashTableItem item = tableS2[index];
+                if(item.getRow().getID() == tableR1[i].getID()){
+                    hitCount++;
+                }
+                else{
+                    missCount++;
+                    for(int j = 0; j < item.getOverflowTable().length; j++){
+                        Row row = item.getOverflowTable()[j];
+                        if(row.getID() == tableR1[i].getID()){
+                            hitCount++;
+                            break;
+                        }
+                        else{
+                            missCount++;
+                        }
+                    }
+                }
+            }
+            else{
+                missCount++;
+            }
+        }
+        return new JoinResult(hitCount, missCount);
+    }
+
+
+}
