@@ -1,0 +1,63 @@
+package com.company;
+
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        try{
+            File file = new File("results.csv");
+            if(file.exists()){
+                file.delete();
+            }
+            file.createNewFile();
+
+            FileWriter fileWriter = new FileWriter("results.csv");
+            fileWriter.write("Table Size,Hit Count No Hash, Miss Count No Hash, Hit Count Hash, Miss Count Hash");
+            fileWriter.write(System.lineSeparator());
+            fileWriter.close();
+        }
+        catch(IOException ex){
+
+        }
+
+
+        for(int i = 1; i <= 10000; i++){
+            JoinOperation operation = new JoinOperation(i);
+            JoinResult noHash = operation.joinR1OnS1();
+            JoinResult withHash = operation.joinR1OnS2();
+
+            /*
+            System.out.println("********************************************");
+            System.out.println("Table Size: " + i);
+            System.out.println("");
+            System.out.println("R1 joined with S1: ");
+            System.out.println("Hit Count: " + noHash.getHitCount());
+            System.out.println("Miss Count: " + noHash.getMissCount());
+            System.out.println("");
+            System.out.println("R1 joined with S2: ");
+            System.out.println("Hit Count: " + withHash.getHitCount());
+            System.out.println("Miss Count: " + withHash.getMissCount());
+            System.out.println("********************************************");
+            */
+
+            try{
+                FileWriter fileWriter = new FileWriter("results.csv", true);
+                fileWriter.write(i + "," + noHash.getHitCount() + "," + noHash.getMissCount() + "," + withHash.getHitCount() + "," + withHash.getMissCount());
+                fileWriter.write(System.lineSeparator());
+                fileWriter.close();
+
+
+            }
+            catch(IOException ex){
+
+            }
+        }
+        Scanner keyboard = new Scanner(System.in);
+        keyboard.next();
+    }
+}
