@@ -1,0 +1,35 @@
+package com.company;
+
+public class HashTableItem {
+
+    private Row row;
+
+    private Row[] overflowTable;
+
+    public HashTableItem(Row row){
+
+        this.row = row;
+
+        overflowTable = new Row[0];
+    }
+
+    public void insertIntoOverflowTable(Row row){
+        Row[] temp = new Row[overflowTable.length+1];
+
+        for(int i = 0; i < overflowTable.length; i++){
+            temp[i] = overflowTable[i];
+        }
+
+        temp[temp.length - 1] = row;
+
+        temp = overflowTable;
+    }
+
+    public Row getRow() {
+        return row;
+    }
+
+    public Row[] getOverflowTable(){
+        return overflowTable;
+    }
+}
