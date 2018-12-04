@@ -1,0 +1,37 @@
+package com.company;
+
+import java.util.Random;
+
+public class Row {
+
+    public final static int SecondAttributeLength = 1000;
+
+    private int firstAttribute;
+    private char[] secondAttribute;
+    private long ID;
+
+
+    public Row(int firstAttribute, char[] secondAttribute, long ID){
+        this.firstAttribute = firstAttribute;
+        this.ID = ID;
+
+        this.secondAttribute = new char[SecondAttributeLength];
+        for(int i = 0; i < secondAttribute.length; i++){
+            this.secondAttribute[i] = secondAttribute[i];
+        }
+
+
+    }
+
+    public int getFirstAttribute() {
+        return firstAttribute;
+    }
+
+    public char[] getSecondAttribute() {
+        return secondAttribute;
+    }
+
+    public long getID() {
+        return ID;
+    }
+}
