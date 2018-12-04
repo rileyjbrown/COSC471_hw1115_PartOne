@@ -1,0 +1,30 @@
+package com.company;
+
+import java.util.Random;
+
+public class Utilities {
+    public static char[] createRandomCharArray(int maxLength){
+        char[] randomCharacters;
+
+        Random random = new Random();
+
+        randomCharacters = new char[random.nextInt(maxLength)];
+
+        for(int i = 0; i < randomCharacters.length; i++){
+
+            char insertChar = (char)random.nextInt(127);
+
+            randomCharacters[i] = insertChar;
+        }
+
+        return randomCharacters;
+    }
+
+    public static int createRandomInt(){
+
+        Random random = new Random();
+
+        return random.nextInt(Integer.MAX_VALUE);
+
+    }
+}
